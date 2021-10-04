@@ -1,12 +1,29 @@
 version: '3'
 services: 
     #PHP Service
+    #  app:
+    #     build:
+    #         dockerfile: ./server/php/Dockerfile
+    #     image: digitalocean.com/php
+    #     container_name: app
+    #     restart: always
+    #     tty: true
+    #     environment:
+    #         SERVICE_NAME: app
+    #         SERVICE_TAGS: dev
+    #     working_dir: /var/www
+    #     volumes:
+    #         - ./src:/var/www
+    #         - ./server/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    #     networks:
+    #         - app-network
     app:
         build:
+            context: .
             dockerfile: ./server/php/Dockerfile
         image: digitalocean.com/php
         container_name: app
-        restart: always
+        restart: unless-stopped
         tty: true
         environment:
             SERVICE_NAME: app
@@ -16,7 +33,7 @@ services:
             - ./src:/var/www
             - ./server/php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
-            - app-network
+        - app-network
     #Nginx Service
     webserver:
         image: nginx:alpine
